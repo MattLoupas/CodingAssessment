@@ -1,4 +1,4 @@
-package loupas.merchantesolutions;
+package loupas.merchantesolutions.service;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class Download {
+public class DownloadService {
 
 	HttpURLConnection httpUrlConnection;
 	

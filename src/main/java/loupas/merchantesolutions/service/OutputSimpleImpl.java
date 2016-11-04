@@ -1,4 +1,4 @@
-package loupas.merchantesolutions;
+package loupas.merchantesolutions.service;
 
 import java.io.BufferedOutputStream;
 import java.io.FileOutputStream;

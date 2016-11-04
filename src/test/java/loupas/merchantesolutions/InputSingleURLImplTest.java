@@ -5,6 +5,9 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 
+import loupas.merchantesolutions.service.Input;
+import loupas.merchantesolutions.service.InputSingleURLImpl;
+
 public class InputSingleURLImplTest {
 	
 	private Input input;

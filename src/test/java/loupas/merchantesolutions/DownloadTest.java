@@ -7,13 +7,15 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import loupas.merchantesolutions.service.DownloadService;
+
 public class DownloadTest {
 	
-	private Download download;
+	private DownloadService download;
 	
 	@Before
 	public void init(){
-		download = new Download();
+		download = new DownloadService();
 	}
 	
 	@Test
