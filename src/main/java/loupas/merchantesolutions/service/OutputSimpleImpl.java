@@ -18,7 +18,8 @@ public class OutputSimpleImpl implements Output{
 			 out.flush();
 			 out.close();
 		 } catch (Exception e){
-			 e.printStackTrace();
+			 e.printStackTrace();//TODO logger.error
+			 throw new RuntimeException(e);
 		 }
 	}
 

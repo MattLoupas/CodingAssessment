@@ -1,5 +1,7 @@
 package loupas.merchantesolutions;
 
+import java.util.List;
+
 import loupas.merchantesolutions.service.DownloadService;
 import loupas.merchantesolutions.service.Input;
 import loupas.merchantesolutions.service.InputSingleURLImpl;
@@ -13,10 +15,13 @@ public class DownloadSize {
 	private DownloadService downloadService;
 
 	public void outputDownloadSizeFromFile(String inputFilePath, String outputFilePath) {
-		String url = getInput(inputFilePath).getURLStrings().get(0);//TODO abstract this
-		long size = getDownloadService().getDownloadSizeInBytes(url);
-		getOutput().writeLine(url +":  " + size, outputFilePath);
+		List<String> urls = getInput(inputFilePath).getURLStrings();
+		for(String url: urls){
+			long size = getDownloadService().getDownloadSizeInBytes(url);
+			getOutput().writeLine(url +":  " + size, outputFilePath);//FIXME abstract this
+		}
 	}
+	
 
 	public Input getInput(String filePath) {
 		if(input == null){
