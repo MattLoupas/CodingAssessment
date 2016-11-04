@@ -39,7 +39,7 @@ public class DownloadSizeTest {
 	@Test
 	public void testOutputDownloadSizeFromFileZeroURLs(){
 		new Expectations() {{
-			input.getURLStrings();result=new ArrayList<String>();
+			input.getUrlStrings();result=new ArrayList<String>();
 		}};
 		
 		downloadSize.outputDownloadSizeFromFile("test path", "test path");
@@ -55,7 +55,7 @@ public class DownloadSizeTest {
 		final ArrayList<String> urls = new ArrayList<String>();
 		urls.add("test url");
 		new Expectations() {{
-			input.getURLStrings();result=urls;
+			input.getUrlStrings();result=urls;
 			downloadService.getDownloadSizeInBytes(anyString);result=1024;
 			output.writeLine(anyString, anyString);
 		}};
@@ -74,7 +74,7 @@ public class DownloadSizeTest {
 		urls.add("test url 1");
 		urls.add("test url 2");
 		new Expectations() {{
-			input.getURLStrings();result=urls;
+			input.getUrlStrings();result=urls;
 			downloadService.getDownloadSizeInBytes("test url 1");result=1024;
 			downloadService.getDownloadSizeInBytes("test url 2");result=2048;
 			output.writeLine(anyString, anyString);

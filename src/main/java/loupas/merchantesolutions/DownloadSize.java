@@ -4,7 +4,7 @@ import java.util.List;
 
 import loupas.merchantesolutions.service.DownloadService;
 import loupas.merchantesolutions.service.Input;
-import loupas.merchantesolutions.service.InputSingleURLImpl;
+import loupas.merchantesolutions.service.InputSimpleTextImpl;
 import loupas.merchantesolutions.service.Output;
 import loupas.merchantesolutions.service.OutputSimpleImpl;
 
@@ -15,7 +15,7 @@ public class DownloadSize {
 	private DownloadService downloadService;
 
 	public void outputDownloadSizeFromFile(String inputFilePath, String outputFilePath) {
-		List<String> urls = getInput(inputFilePath).getURLStrings();
+		List<String> urls = getInput(inputFilePath).getUrlStrings();
 		for(String url: urls){
 			long size = getDownloadService().getDownloadSizeInBytes(url);
 			getOutput().writeLine(url +":  " + size, outputFilePath);//FIXME abstract this
@@ -26,7 +26,7 @@ public class DownloadSize {
 	public Input getInput(String filePath) {
 		if(input == null){
 			//TODO consider replacing with injection or factory
-			input = new InputSingleURLImpl(filePath);
+			input = new InputSimpleTextImpl(filePath);
 		}
 		return input;
 	}
