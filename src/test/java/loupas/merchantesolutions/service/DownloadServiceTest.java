@@ -1,4 +1,4 @@
-package loupas.merchantesolutions;
+package loupas.merchantesolutions.service;
 
 import java.util.List;
 import java.util.Map;
@@ -9,7 +9,7 @@ import org.junit.Test;
 
 import loupas.merchantesolutions.service.DownloadService;
 
-public class DownloadTest {
+public class DownloadServiceTest {
 	
 	private DownloadService download;
 	

@@ -1,4 +1,4 @@
-package loupas.merchantesolutions;
+package loupas.merchantesolutions.service;
 
 import org.junit.Test;
 
@@ -10,5 +10,6 @@ public class OutputSimpleImplTest {
 	public void createOutputFileTest(){
 		Output output = new OutputSimpleImpl();
 		output.writeLine("Hello World", "bin/output.txt");
+		//TODO needs validation
 	}
 }
