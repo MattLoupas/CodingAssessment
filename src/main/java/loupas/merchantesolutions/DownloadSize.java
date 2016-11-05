@@ -3,6 +3,7 @@ package loupas.merchantesolutions;
 import java.util.List;
 
 import loupas.merchantesolutions.service.DownloadService;
+import loupas.merchantesolutions.service.HttpDownloadServiceImpl;
 import loupas.merchantesolutions.service.Input;
 import loupas.merchantesolutions.service.InputSimpleTextImpl;
 import loupas.merchantesolutions.service.Output;
@@ -50,7 +51,7 @@ public class DownloadSize {
 	public DownloadService getDownloadService() {
 		if(downloadService == null){
 			//TODO consider replacing with injection or factory
-			downloadService = new DownloadService();
+			downloadService = new HttpDownloadServiceImpl();
 		}
 		return downloadService;
 	}

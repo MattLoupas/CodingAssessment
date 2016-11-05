@@ -19,17 +19,17 @@ import mockit.Verifications;
 import mockit.integration.junit4.JMockit;
 
 @RunWith(JMockit.class)
-public class DownloadServiceTest {
+public class HttpDownloadServiceImplTest {
 	
 	@Mocked
 	private HttpURLConnection httpUrlConnection;
 	
-	private DownloadService download;
+	private HttpDownloadServiceImpl download;
 	
 	
 	@Before
 	public void init(){
-		download = new DownloadService();
+		download = new HttpDownloadServiceImpl();
 	}
 	
 	@Test

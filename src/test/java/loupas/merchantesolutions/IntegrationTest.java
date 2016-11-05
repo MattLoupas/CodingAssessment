@@ -4,15 +4,15 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import loupas.merchantesolutions.service.DownloadService;
+import loupas.merchantesolutions.service.HttpDownloadServiceImpl;
 
 //FIXME refactor me
 public class IntegrationTest {
-	DownloadService download;
+	HttpDownloadServiceImpl download;
 	
 	@Before
 	public void init(){
-		download = new DownloadService();
+		download = new HttpDownloadServiceImpl();
 	}
 	
 	@Test
