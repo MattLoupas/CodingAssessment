@@ -10,10 +10,23 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.log4j.Logger;
+
+//FIXME refactor
 public class DownloadService {
 
-	HttpURLConnection httpUrlConnection;
+	private static Logger logger = Logger.getLogger(DownloadService.class);
 	
+	private HttpURLConnection httpUrlConnection;
+	
+	public HttpURLConnection getHttpUrlConnection() {
+		return httpUrlConnection;
+	}
+
+	public void setHttpUrlConnection(HttpURLConnection httpUrlConnection) {
+		this.httpUrlConnection = httpUrlConnection;
+	}
+
 	public long getDownloadSizeInBytes(String url) {
 		if(url == null || url.isEmpty()){
 			return 0;
@@ -59,20 +72,19 @@ public class DownloadService {
 		}
 	}
 
-	public long getContentLength(String urlString) {
+	private long getContentLength(String urlString) {
 		URL url = null;
 		
 		try {
 			url = new URL(urlString);
 		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error(e);
 		}
 		try {
 			connectToURL(url);
 			return getContentLength();
 		} catch (Exception e){
-			
+			logger.error(e);
 		} finally {
 			disconnect();
 		}
@@ -83,7 +95,7 @@ public class DownloadService {
 	private void printMap(Map<String, List<String>> map){
 		Set<String> keys = map.keySet();
 		for(String key:keys){
-			System.out.println(key + ":   " +  map.get(key));
+			logger.debug(key + ":   " +  map.get(key));
 		}
 	}
 	

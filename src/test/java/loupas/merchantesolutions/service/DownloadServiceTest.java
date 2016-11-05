@@ -1,17 +1,31 @@
 package loupas.merchantesolutions.service;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
-import loupas.merchantesolutions.service.DownloadService;
+import mockit.Expectations;
+import mockit.Mocked;
+import mockit.Verifications;
+import mockit.integration.junit4.JMockit;
 
+@RunWith(JMockit.class)
 public class DownloadServiceTest {
 	
+	@Mocked
+	private HttpURLConnection httpUrlConnection;
+	
 	private DownloadService download;
+	
 	
 	@Before
 	public void init(){
@@ -25,21 +39,35 @@ public class DownloadServiceTest {
 		Assert.assertEquals(0, download.getDownloadSizeInBytes(""));
 	}
 	
+	
 	@Test
-	public void testGetContentLengthTxtFile(){
-		Assert.assertEquals(412420, download.getDownloadSizeInBytes("http://www.ietf.org/rfc/rfc2616.txt"));
+	public void testGetDownloadSizeInBytesInvalidURL(){
+		Assert.assertEquals(0, download.getDownloadSizeInBytes("invalid URL"));
 	}
 	
 	@Test
-	public void testGetDownloadSizeInBytesHTMLFile(){
-		//TODO this needs to be mocked since every call returns a slightly different size
-		Assert.assertTrue(download.getDownloadSizeInBytes("https://google.com") > 10000);
+	public void testGetDownloadSizeInBytesValidUnreachableURL(@Mocked final URL url, @Mocked final Logger logger) throws IOException{
+		final Exception myInvalidUrlException = new Exception("my invalid url exception");
+		new Expectations() {{
+			url.openConnection();result=httpUrlConnection;
+			httpUrlConnection.getInputStream();result=myInvalidUrlException;
+		}};
+		Assert.assertEquals(0, download.getDownloadSizeInBytes("http://invalidurl"));
+		new Verifications() {{
+			httpUrlConnection.disconnect();times=1;
+			logger.error(myInvalidUrlException);times=1;
+		}};
 	}
 	
 	@Test
-	public void testGetDownloadSizeInBytesPDFFile(){
-		//TODO passes when ran in Eclipse, however, fails in Maven as the size differs slightly.  This needs to be mocked
-		Assert.assertTrue(download.getDownloadSizeInBytes("http://bartaco.com/media/bartaco-general-menu-10-2016.pdf") > 85000);
+	public void testGetDownloadSizeInBytesValidDownloadSize(@Mocked final URL url, @Mocked final BufferedReader reader) throws IOException{
+		new Expectations() {{
+			url.openConnection();result=httpUrlConnection;
+			reader.readLine();returns("text 1", "text 2", null);
+		}};
+		
+		Assert.assertEquals(12, download.getDownloadSizeInBytes("http://myurl"));
+		
 	}
 	
 	@Test
@@ -47,7 +75,6 @@ public class DownloadServiceTest {
 		Map<String, List<String>> header = download.getHTTPHeader("https://google.com");
 		Assert.assertNotNull(header);
 	}
-	
 
 	
 }

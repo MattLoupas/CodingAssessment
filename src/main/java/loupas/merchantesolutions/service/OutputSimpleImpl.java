@@ -5,8 +5,12 @@ import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
+//FIXME refactor
 public class OutputSimpleImpl implements Output{
 
+	private static Logger logger = Logger.getLogger(OutputSimpleImpl.class);
+	
 	public void write(Map<String, Object> data, String outputFilePath) {
 
 	}
@@ -18,7 +22,7 @@ public class OutputSimpleImpl implements Output{
 			 out.flush();
 			 out.close();
 		 } catch (Exception e){
-			 e.printStackTrace();//TODO logger.error
+			 logger.error(e);
 			 throw new RuntimeException(e);
 		 }
 	}
