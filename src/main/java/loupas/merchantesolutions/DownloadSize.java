@@ -19,7 +19,7 @@ public class DownloadSize {
 		List<String> urls = getInput(inputFilePath).getUrlStrings();
 		for(String url: urls){
 			long size = getDownloadService().getDownloadSizeInBytes(url);
-			getOutput().writeLine(url +":  " + size, outputFilePath);//FIXME abstract this
+			getOutput().writeLine(url +":  " + size, outputFilePath);//TODO abstract this
 		}
 	}
 	

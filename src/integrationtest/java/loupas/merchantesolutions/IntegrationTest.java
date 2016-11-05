@@ -6,7 +6,17 @@ import org.junit.Test;
 
 import loupas.merchantesolutions.service.HttpDownloadServiceImpl;
 
-//FIXME refactor me
+
+/**
+ * Since these are integration tests relying on external sources beyond the control of the testing environment, these
+ * test are kept separate from the default src/test as to not run the risk of a build failure due to changes in file size
+ * from the third party sources.
+ * 
+ *  Typically these types of integration test are performed in an integration environment where the integration sources
+ *  can be controlled (for example hosting an apache server to serve static content of a known size) 
+ */
+
+//TODO update test cases to read from input file and validate against output file
 public class IntegrationTest {
 	HttpDownloadServiceImpl download;
 	
@@ -22,13 +32,11 @@ public class IntegrationTest {
 	
 	@Test
 	public void testGetDownloadSizeInBytesHTMLFile(){
-		//FIXME this needs to be mocked since every call returns a slightly different size
 		Assert.assertTrue(download.getDownloadSizeInBytes("https://google.com") > 10000);
 	}
 	
 	@Test
 	public void testGetDownloadSizeInBytesPDFFile(){
-		//FIXME passes when ran in Eclipse, however, fails in Maven as the size differs slightly.  This needs to be mocked
 		Assert.assertTrue(download.getDownloadSizeInBytes("http://bartaco.com/media/bartaco-general-menu-10-2016.pdf") > 85000);
 	}
 	
