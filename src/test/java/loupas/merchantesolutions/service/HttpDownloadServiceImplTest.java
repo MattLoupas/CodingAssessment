@@ -1,11 +1,11 @@
 package loupas.merchantesolutions.service;
 
-import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.List;
-import java.util.Map;
+import java.nio.charset.Charset;
 
 import org.apache.log4j.Logger;
 import org.junit.Assert;
@@ -60,21 +60,24 @@ public class HttpDownloadServiceImplTest {
 	}
 	
 	@Test
-	public void testGetDownloadSizeInBytesValidDownloadSize(@Mocked final URL url, @Mocked final BufferedReader reader) throws IOException{
+	public void testGetDownloadSizeInBytesValidDownloadSizeFromInputStream(@Mocked final URL url) throws IOException{
+		byte[] inputBytes = Charset.forName("UTF-16").encode("my test string").array();
+		final InputStream inputStream = new ByteArrayInputStream(inputBytes);
 		new Expectations() {{
 			url.openConnection();result=httpUrlConnection;
-			reader.readLine();returns("text 1", "text 2", null);
+			httpUrlConnection.getInputStream();result=inputStream;
 		}};
 		
-		Assert.assertEquals(12, download.getDownloadSizeInBytes("http://myurl"));
-		
+		Assert.assertEquals(inputBytes.length, download.getDownloadSizeInBytes("http://myurl"));
 	}
 	
 	@Test
-	public void testGetHeader(){
-		Map<String, List<String>> header = download.getHTTPHeader("https://google.com");
-		Assert.assertNotNull(header);
+	public void testGetDownloadSizeInBytesValidDownloadSizeFromHeader(@Mocked final URL url) throws IOException{
+		new Expectations() {{
+			url.openConnection();result=httpUrlConnection;
+			httpUrlConnection.getContentLengthLong();result=1024;
+		}};
+		Assert.assertEquals(1024, download.getDownloadSizeInBytes("http://myurl"));
 	}
 
-	
 }

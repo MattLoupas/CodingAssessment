@@ -6,13 +6,9 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 import org.apache.log4j.Logger;
 
-//FIXME refactor
 public class HttpDownloadServiceImpl implements DownloadService {
 
 	private static Logger logger = Logger.getLogger(HttpDownloadServiceImpl.class);
@@ -34,47 +30,9 @@ public class HttpDownloadServiceImpl implements DownloadService {
 			return getContentLength(url);
 		}
 	}
-	
-	private void connectToURL(URL url){
-		try {
-			httpUrlConnection = (HttpURLConnection)url.openConnection();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-	
-	private void disconnect(){
-		if(httpUrlConnection != null){
-			httpUrlConnection.disconnect();
-		}
-	}
-
-	public Map<String, List<String>> getHTTPHeader(String urlString) {
-		URL url = null;
-		try {
-			url = new URL(urlString);
-		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		try {
-			connectToURL(url);
-			httpUrlConnection.setRequestProperty("Accept-Encoding", "identity");
-
-			System.out.println(httpUrlConnection.getContentLength());
-			
-			
-			Map<String, List<String>> headers = httpUrlConnection.getHeaderFields();
-			printMap(headers);
-			return headers;
-		} finally {
-			disconnect();
-		}
-	}
 
 	private long getContentLength(String urlString) {
 		URL url = null;
-		
 		try {
 			url = new URL(urlString);
 		} catch (MalformedURLException e) {
@@ -85,30 +43,49 @@ public class HttpDownloadServiceImpl implements DownloadService {
 			return getContentLength();
 		} catch (Exception e){
 			logger.error(e);
+			return 0;
 		} finally {
 			disconnect();
 		}
-			
-		return 0;
 	}
 	
-	private void printMap(Map<String, List<String>> map){
-		Set<String> keys = map.keySet();
-		for(String key:keys){
-			logger.debug(key + ":   " +  map.get(key));
+	private void connectToURL(URL url) throws IOException{
+		httpUrlConnection = (HttpURLConnection)url.openConnection();
+		httpUrlConnection.setRequestProperty("Accept-Encoding", "identity");
+	}
+	
+	private void disconnect(){
+		if(httpUrlConnection != null){
+			httpUrlConnection.disconnect();
 		}
 	}
 	
-	private int getContentLength() throws Exception{
-		BufferedReader in = new BufferedReader(
-		        new InputStreamReader(httpUrlConnection.getInputStream()));
+	private long getContentLength() throws IOException {
+		if(isContentLengthAvailableFromHeader()){
+			return getContentLengthFromHeader();
+		} else {
+			return getContentLengthFromInputStream();
+		}
+	}
+	
+	private boolean isContentLengthAvailableFromHeader(){
+		return getContentLengthFromHeader() > 0;
+	}
+	
+	private long getContentLengthFromHeader(){
+		return httpUrlConnection.getContentLengthLong();
+	}
+	
+	private int getContentLengthFromInputStream() throws IOException{
+		InputStreamReader inputStreamReader = new InputStreamReader(httpUrlConnection.getInputStream());
+		BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
 		String inputLine;
 		StringBuffer response = new StringBuffer();
 
-		while ((inputLine = in.readLine()) != null) {
+		while ((inputLine = bufferedReader.readLine()) != null) {
 			response.append(inputLine);
 		}
-		in.close();
+		bufferedReader.close();
 		
 		return response.length();
 	}
