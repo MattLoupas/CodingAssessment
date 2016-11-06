@@ -48,14 +48,11 @@ public class InputSimpleTextImpl implements Input {
 	}
 
 	private void readLines(BufferedReader bufferReader) {
-		String line = null;
 		try {
-			do{
-				line = bufferReader.readLine();
-				if(line != null){
-					urlStrings.add(line);
-				}
-			} while (line != null);
+			String line = null;
+			while((line = bufferReader.readLine()) != null){
+				urlStrings.add(line);
+			}
 		} catch (IOException e) {
 			logger.error(e);
 		}
