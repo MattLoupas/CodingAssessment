@@ -1,5 +1,6 @@
 package loupas.merchantesolutions;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import loupas.merchantesolutions.service.DownloadService;
@@ -17,10 +18,12 @@ public class DownloadSize {
 
 	public void outputDownloadSizeFromFile(String inputFilePath, String outputFilePath) {
 		List<String> urls = getInput(inputFilePath).getUrlStrings();
+		List<String> data = new ArrayList<String>();
 		for(String url: urls){
 			long size = getDownloadService().getDownloadSizeInBytes(url);
-			getOutput().writeLine(url +":  " + size, outputFilePath);//TODO abstract this
+			data.add(url +":  " + size + "\n");
 		}
+		getOutput(outputFilePath).write(data);
 	}
 	
 
@@ -36,10 +39,10 @@ public class DownloadSize {
 		this.input = input;
 	}
 
-	public Output getOutput() {
+	public Output getOutput(String outputFilePath) {
 		if(output == null){
 			//TODO consider replacing with injection or factory
-			output = new OutputSimpleImpl();
+			output = new OutputSimpleImpl(outputFilePath);
 		}
 		return output;
 	}

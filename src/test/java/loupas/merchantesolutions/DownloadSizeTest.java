@@ -1,7 +1,9 @@
 package loupas.merchantesolutions;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -46,7 +48,7 @@ public class DownloadSizeTest {
 
 		new Verifications() {{
 			downloadService.getDownloadSizeInBytes(anyString);times=0;
-			output.writeLine(anyString, anyString);times=0;
+			output.writeLine(anyString);times=0;
 		}};
 	}
 	
@@ -57,14 +59,17 @@ public class DownloadSizeTest {
 		new Expectations() {{
 			input.getUrlStrings();result=urls;
 			downloadService.getDownloadSizeInBytes(anyString);result=1024;
-			output.writeLine(anyString, anyString);
+			output.write((List<String>) any);
 		}};
 		
 		downloadSize.outputDownloadSizeFromFile("test path", "test path");
 
 		new Verifications() {{
 			downloadService.getDownloadSizeInBytes("test url");times=1;
-			output.writeLine("test url:  1024", anyString);times=1;
+			List<String> captureData;
+			output.write(captureData = withCapture());times=1;
+			Assert.assertEquals(1, captureData.size());
+			Assert.assertEquals("test url:  1024\n", captureData.get(0));
 		}};
 	}
 	
@@ -77,16 +82,19 @@ public class DownloadSizeTest {
 			input.getUrlStrings();result=urls;
 			downloadService.getDownloadSizeInBytes("test url 1");result=1024;
 			downloadService.getDownloadSizeInBytes("test url 2");result=2048;
-			output.writeLine(anyString, anyString);
+			output.write((List<String>) any);
 		}};
 		
 		downloadSize.outputDownloadSizeFromFile("test path", "test path");
 
 		new VerificationsInOrder() {{
 			downloadService.getDownloadSizeInBytes("test url 1");times=1;
-			output.writeLine("test url 1:  1024", anyString);times=1;
 			downloadService.getDownloadSizeInBytes("test url 2");times=1;
-			output.writeLine("test url 2:  2048", anyString);times=1;
+			List<String> captureData;
+			output.write(captureData = withCapture());times=1;
+			Assert.assertEquals(2, captureData.size());
+			Assert.assertEquals("test url 1:  1024\n", captureData.get(0));
+			Assert.assertEquals("test url 2:  2048\n", captureData.get(1));
 		}};
 	}
 
