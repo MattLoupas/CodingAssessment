@@ -7,11 +7,12 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class HttpDownloadServiceImpl implements DownloadService {
 
-	private static Logger logger = Logger.getLogger(HttpDownloadServiceImpl.class);
+	private Logger logger = LoggerFactory.getLogger(HttpDownloadServiceImpl.class);
 	
 	private HttpURLConnection httpUrlConnection;
 	
@@ -36,13 +37,13 @@ public class HttpDownloadServiceImpl implements DownloadService {
 		try {
 			url = new URL(urlString);
 		} catch (MalformedURLException e) {
-			logger.error(e);
+			logger.error(e.getLocalizedMessage(), e);
 		}
 		try {
 			connectToURL(url);
 			return getContentLength();
 		} catch (Exception e){
-			logger.error(e);
+			logger.error(e.getLocalizedMessage(), e);
 			return 0;
 		} finally {
 			disconnect();

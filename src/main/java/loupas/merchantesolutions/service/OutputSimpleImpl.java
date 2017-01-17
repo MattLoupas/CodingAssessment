@@ -8,11 +8,13 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 public class OutputSimpleImpl implements Output{
 
-	private static Logger logger = Logger.getLogger(OutputSimpleImpl.class);
+	private static Logger logger = LoggerFactory.getLogger(OutputSimpleImpl.class);
 	
 	private OutputStream outputStream;
 	private String outputFilePath;
@@ -41,7 +43,7 @@ public class OutputSimpleImpl implements Output{
 			 }
 			 closeOutputStream();
 		 } catch (Exception e){
-			 logger.error(e);
+			 logger.error(e.getLocalizedMessage(), e);
 			 throw new RuntimeException(e);
 		 }
 	}

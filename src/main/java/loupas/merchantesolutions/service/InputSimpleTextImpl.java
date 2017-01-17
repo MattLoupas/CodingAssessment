@@ -7,11 +7,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class InputSimpleTextImpl implements Input {
 
-	private static Logger logger = Logger.getLogger(InputSimpleTextImpl.class);
+	private static Logger logger = LoggerFactory.getLogger(InputSimpleTextImpl.class);
 	
 	private String inputFilePath;
 	private List<String> urlStrings;
@@ -33,7 +34,7 @@ public class InputSimpleTextImpl implements Input {
 		try {
 			bufferReader = new BufferedReader(new FileReader(inputFilePath));
 		} catch (FileNotFoundException e) {
-			logger.error(e);
+			logger.error(e.getLocalizedMessage(), e);
 			return;
 		}
 		try {
@@ -42,7 +43,7 @@ public class InputSimpleTextImpl implements Input {
 			try {
 				bufferReader.close();
 			} catch (IOException e) {
-				logger.error(e);
+				logger.error(e.getLocalizedMessage(), e);
 			}
 		}
 	}
@@ -54,7 +55,7 @@ public class InputSimpleTextImpl implements Input {
 				urlStrings.add(line);
 			}
 		} catch (IOException e) {
-			logger.error(e);
+			logger.error(e.getLocalizedMessage(), e);
 		}
 	}
 
